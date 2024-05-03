@@ -1,10 +1,12 @@
-from rest_framework import generics
+from rest_framework import generics,views
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers.serializers import UserSerializer,UserDetailSerializer
 from custom_auth.models import CustomUser
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
+from ace_tokens.models import PasswordTokens
 # Create your views here.
 
 
@@ -33,3 +35,20 @@ class UserFullControlView(ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserDetailSerializer
     permission_classes = [IsAdminUser]
+
+
+class PasswordRecoveryView(views.APIView):
+    def get(self,request,*args,**kwargs):
+        email = request.GET.get('email')
+        if email:
+            try:
+                # ! CHECK IF ACCOUNT WITH EMAIL EXISTS
+                qs = CustomUser.objects.filter(email = email)
+                if not qs.exists():
+                    return Response({'error':"account with the given mail doesnt exist"},status=404)
+                # todo generate recovery token using email and send it to the users email
+                PasswordTokens.objects.create(user = qs[0])
+                return Response({'data':'Recovery token has succesfully been sent to your email'},status=200)
+            except Exception as e:
+                return Response({'error':f"error occured [{e}]"},status=400)
+        return Response('email cant be empty')

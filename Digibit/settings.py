@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # CUSTOM APPS
     'custom_auth',
     'api',
+    'ace_tokens',
     # THIRD PARTY APPS
     'rest_framework',
     'rest_framework_simplejwt',

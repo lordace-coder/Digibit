@@ -9,6 +9,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('',views.CreateUserView.as_view()),
+    path('forgot-password',views.PasswordRecoveryView.as_view()),
     #* Authentication Views
     path('api/token',TokenObtainPairView.as_view(),name='token_obtain_view'),
     path('api/token/refresh',TokenRefreshView.as_view(),name='token_refresh_view')
