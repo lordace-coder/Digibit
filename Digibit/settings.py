@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 
     # CUSTOM APPS
     'custom_auth',
-
+    'api',
     # THIRD PARTY APPS
     'rest_framework',
     'rest_framework_simplejwt',
@@ -118,3 +118,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# * REST FRAMEWORK CONFIGURATIONS
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ]
+}

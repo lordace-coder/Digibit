@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     state_of_origin = models.CharField(max_length = 100)
     state_of_residence = models.CharField(max_length = 100)
     phone_number = models.CharField(max_length=50)
-    recovery_phone_number = models.CharField(max_length=50)
+
     verified_phone_number = models.BooleanField(default=False)
     verified_email_address = models.BooleanField(default=False)
     # profile_picture = ... 
