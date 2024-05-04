@@ -50,3 +50,4 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     def is_verified_user(self):
         return self.verified_email_address and self.verified_phone_number
 
+

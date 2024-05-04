@@ -37,7 +37,23 @@ class UserFullControlView(ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
+
 class PasswordRecoveryView(views.APIView):
+    def post(self,request,*args,**kwargs):
+        try:
+            token = request.data.get('token')
+            new_password = request.data.get('new_password')
+            email = request .data.get('email')
+            # * NEW PASSWORD WILL BE VALIDATED FROM THE FRONT END
+            token_instance = PasswordTokens.objects.get(user__email = email)
+            if token == token_instance.token:
+                token_instance.user.set_password(new_password)
+                return Response(status=200)
+            else:
+                return Response({'error':'incorrect token'},status=404)
+        except Exception as e:
+            return Response({'error':f"error occured [{e}]"},status=400)
+
     def get(self,request,*args,**kwargs):
         email = request.GET.get('email')
         if email:

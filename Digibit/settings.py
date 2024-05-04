@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'custom_auth',
     'api',
     'ace_tokens',
+    'services',
     # THIRD PARTY APPS
     'rest_framework',
     'rest_framework_simplejwt',
@@ -129,3 +130,5 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ]
 }
+
+CORS_ORIGIN_ALLOW_ALL = True

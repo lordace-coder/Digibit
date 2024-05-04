@@ -6,7 +6,7 @@ def validate_username(value:str):
     # ! strip every whitespace from the 'value' variable
     value = remove_whitespace(value)
     query = CustomUser.objects.filter(username__iexact=value)
-
+    print(value)
     if query.exists():
         raise serializers.ValidationError("Username already exists")
     if ' ' in value:
