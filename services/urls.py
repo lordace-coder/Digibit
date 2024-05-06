@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('mine-session',views.streamingMessage)
+    path('mine-session/<slug:id>',views.streamingMessage,name="mine"),
+    path('profile/',views.ProfileView.as_view()),
 ]

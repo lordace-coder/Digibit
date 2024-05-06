@@ -1,3 +1,5 @@
+from services.serializers import MiningBotSerializer
+from api.models import Profile
 from custom_auth.models import CustomUser
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,CharField,BaseSerializer
 from custom_auth.validators import validate_username
@@ -33,3 +35,19 @@ class UserDetailSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
         exclude = ("id","password")
+
+
+class ProfileSerializer(ModelSerializer):
+    bots = MiningBotSerializer(many = True)
+    class Meta:
+        model = Profile
+        fields = (
+            'user',
+            'no_of_referred_users',
+            'is_vendor',
+            'bio',
+            'contact_link',
+            'wallet',
+            'image',
+            'bots'
+        )
