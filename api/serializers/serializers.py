@@ -1,3 +1,4 @@
+from api.serializers.wallet_serializer import WalletSerializer
 from services.serializers import MiningBotSerializer
 from api.models import Profile
 from custom_auth.models import CustomUser
@@ -39,6 +40,8 @@ class UserDetailSerializer(ModelSerializer):
 
 class ProfileSerializer(ModelSerializer):
     bots = MiningBotSerializer(many = True)
+    wallet= WalletSerializer()
+
     class Meta:
         model = Profile
         fields = (
@@ -46,8 +49,8 @@ class ProfileSerializer(ModelSerializer):
             'no_of_referred_users',
             'is_vendor',
             'bio',
-            'contact_link',
             'wallet',
+            'contact_link',
             'image',
             'bots'
         )

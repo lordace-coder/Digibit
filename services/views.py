@@ -12,7 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from api.models import MiningBot,Profile,Wallet
 from api.serializers.serializers import ProfileSerializer
 from services.serializers import MiningBotSerializer
-
+from decimal import Decimal
 
 class TransferAPiView(views.APIView):
     """
@@ -29,18 +29,20 @@ class TransferAPiView(views.APIView):
 def my_stream(bot:MiningBot,profile:Profile):
     mined_total = 0
     times_left = 10
-    cool_down = 10
+    cool_down = bot.cool_down_time
     data = dict()
 
     while times_left > 1:
-        tokens = randrange(1,5)/100
-        profile.wallet.credit(tokens)
+        tokens = randrange(1,5)/100 #replace with bots mine range
+        bot.hp = bot.hp - Decimal(randrange(1,3)/8)
+        bot.save()
         mined_total += tokens
         data['tokens'] = tokens
         data['mined_total'] = mined_total
         times_left -=1
         yield "\ndata: {}\n\n".format(data)
         time.sleep(cool_down)
+    profile.wallet.credit(data.get('mined_total'))
 
 
 # main view
@@ -54,14 +56,16 @@ class BotMiningView(generics.RetrieveAPIView):
 
         # TODO CHECK IF THE REQUESTED BOT EXISTS
         bot_id = kwargs.get('id')
+        print(len(bot_id),len(user_profile.bots.all()[0].id))
         bot  = user_profile.bots.filter(id=bot_id)
         if bot.exists():
             bot = bot[0]
-        if not bot.hp > 0:#check if bot is still useable
-            return Response(status=404)
-        # todo PASS IN THE USERS WALLET INTO THE STREAM AND ALSO THE BOT IN USE
-        event_stream = StreamingHttpResponse(my_stream(bot,user_profile),content_type = 'text/event-stream',status = 200)
-        return event_stream
+            if not bot.hp > 0:#check if bot is still useable
+                return Response(status=404)
+            # todo PASS IN THE USERS WALLET INTO THE STREAM AND ALSO THE BOT IN USE
+            event_stream = StreamingHttpResponse(my_stream(bot,user_profile),content_type = 'text/event-stream',status = 200)
+            return event_stream
+        return Response({'error':'bot does not exist'},status=404)
 streamingMessage = BotMiningView.as_view()
 
 
