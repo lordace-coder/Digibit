@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'ace_tokens',
     'services',
     'admin_configs',
+    'reservations',
     # THIRD PARTY APPS
     'rest_framework',
     'rest_framework_simplejwt',
